@@ -1,19 +1,35 @@
+import java.util.*
+import kotlin.random.Random
+
 class Game(val height: Int, val width: Int) {
 
     fun start() {
         val snake = Snake(width, height)
         val goal = Goal(9, 7)
 
-        render(snake, goal)
+        val scn = Scanner(System.`in`)
+
+        while(true) {
+
+            render(snake, goal)
+
+            when(scn.nextLine()){
+                "w" -> {snake.move(goal, 0, -1)}
+                "a" -> {snake.move(goal, -1, 0)}
+                "s" -> {snake.move(goal, 0, 1)}
+                "d" -> {snake.move(goal, 1, 0)}
+            }
+        }
     }
 
-    fun render(snake: Snake, goal: Goal) {
-        val snakeArray = snake.getArray()
+    private fun render(snake: Snake, goal: Goal) {
 
+        val snakeArray = snake.getArray()
+        println()
         println("-".repeat(width + 2))
-        for (i in 0..height) {
+        for (i in 0 until height) {
             var line = ""
-            for (j in 0..width + 2) {
+            for (j in 0..width + 1) {
                 line += if (j == 0 || j == width + 1) {
                     "|"
                 } else {
@@ -25,7 +41,7 @@ class Game(val height: Int, val width: Int) {
                     } else if (snakeArray[i][jNorm] == 2) {
                         "O"
                     } else {
-                        " "
+                        "."
                     }
                 }
             }
@@ -35,6 +51,9 @@ class Game(val height: Int, val width: Int) {
     }
 
     data class Goal(var x: Int, var y: Int) {
-
+        fun rePos(width: Int, height: Int) {
+            x = Random.nextInt(0, width - 1)
+            y = Random.nextInt(0, height - 1)
+        }
     }
 }

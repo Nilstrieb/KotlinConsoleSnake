@@ -1,38 +1,59 @@
+import Game.Goal
+
 class Snake(private val width: Int, private val height: Int) {
     private var x = width / 2
     private var y = height / 2
     private var dirX = 1
     private var dirY = 0
 
-    val tiles = ArrayList<Tile>()
+    var tiles = ArrayList<Tile>()
 
-    fun move() {
+    public fun move(goal: Goal, dirX: Int, dirY: Int) {
+
+        this.dirX = dirX
+        this.dirY= dirY
+
+        var tail = Tile(x, y)
+        var front = Tile(x, y)
+
         x += dirX
         y += dirY
 
         if (!(x in 0 until width && x in 0 until height)) {
+            println("wall rip")
             die()
         }
 
-        var last = Tile(x, y)
-        var behind = Tile(x, y)
-        tiles.forEach {
-            behind = it
-            it.x = last.x
-            it.y = last.y
+        if (tiles.size > 0) {
+            tiles.forEach {
+                tail = it
+                it.x = front.x
+                it.y = front.y
 
-            if (it.x == this.x && it.y == this.y) {
-                die()
+                if (it.x == this.x && it.y == this.y) {
+                    println("self rip")
+                    die()
+                }
+
+                front = it
             }
-
-            last = it
         }
 
-        tiles.add(behind.copy())
+        if(goal.x == this.x && goal.y == this.y){
+            println("append")
+            tiles.add(tail.copy())
+            goal.rePos(width, height)
+        }
+
     }
 
-    fun die() {
-
+    private fun die() {
+        println("rip")
+        tiles = ArrayList()
+        x = width / 2
+        y = height / 2
+        dirX = 1
+        dirY = 0
     }
 
     fun getArray(): Array<IntArray> {
@@ -43,6 +64,7 @@ class Snake(private val width: Int, private val height: Int) {
         array[y][x] = 2
         return array
     }
+
+    data class Tile(var x: Int, var y: Int)
 }
 
-data class Tile(var x: Int, var y: Int)
