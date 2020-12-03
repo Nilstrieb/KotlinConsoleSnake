@@ -8,7 +8,11 @@ class Snake(private val width: Int, private val height: Int) {
 
     var tiles = ArrayList<Tile>()
 
-    public fun move(goal: Goal, dirX: Int, dirY: Int) {
+    fun move(goal: Goal){
+        move(goal, dirX, dirY)
+    }
+
+    fun move(goal: Goal, dirX: Int, dirY: Int) {
 
         this.dirX = dirX
         this.dirY= dirY
@@ -40,7 +44,6 @@ class Snake(private val width: Int, private val height: Int) {
         }
 
         if(goal.x == this.x && goal.y == this.y){
-            println("append")
             tiles.add(tail.copy())
             goal.rePos(width, height)
         }
@@ -48,7 +51,6 @@ class Snake(private val width: Int, private val height: Int) {
     }
 
     private fun die() {
-        println("rip")
         tiles = ArrayList()
         x = width / 2
         y = height / 2

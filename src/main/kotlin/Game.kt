@@ -3,23 +3,28 @@ import kotlin.random.Random
 
 class Game(val height: Int, val width: Int, val view: SnakeView) {
 
+    var keyBuffer = ""
+
     fun start() {
         val snake = Snake(width, height)
         val goal = Goal(9, 7)
 
-        val scn = Scanner(System.`in`)
-
         while (true) {
-
             render(snake, goal)
-            snake.move(goal, 1, 0)
-            Thread.sleep(1000)        }
+            Thread.sleep(1000)
+            when(keyBuffer){
+                "w" -> snake.move(goal, 0, -1)
+                "a" -> snake.move(goal, -1, 0)
+                "s" -> snake.move(goal, 0, 1)
+                "d" -> snake.move(goal, 1, 0)
+                else -> snake.move(goal)
+            }
+        }
     }
 
     private fun render(snake: Snake, goal: Goal) {
 
         val out = StringBuilder()
-
         val snakeArray = snake.getArray()
         out.append("-".repeat(2 * width + 3)).append("\n")
         for (i in 0 until height) {
@@ -45,6 +50,10 @@ class Game(val height: Int, val width: Int, val view: SnakeView) {
         }
         out.append("-".repeat(2 * width + 3))
         view.output(out.toString())
+    }
+
+    fun keyTyped(key: String) {
+        keyBuffer = key
     }
 
     data class Goal(var x: Int, var y: Int) {
