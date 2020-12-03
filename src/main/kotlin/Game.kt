@@ -1,7 +1,7 @@
 import java.util.*
 import kotlin.random.Random
 
-class Game(val height: Int, val width: Int) {
+class Game(val height: Int, val width: Int, val view: SnakeView) {
 
     fun start() {
         val snake = Snake(width, height)
@@ -9,45 +9,42 @@ class Game(val height: Int, val width: Int) {
 
         val scn = Scanner(System.`in`)
 
-        while(true) {
+        while (true) {
 
             render(snake, goal)
-
-            when(scn.nextLine()){
-                "w" -> {snake.move(goal, 0, -1)}
-                "a" -> {snake.move(goal, -1, 0)}
-                "s" -> {snake.move(goal, 0, 1)}
-                "d" -> {snake.move(goal, 1, 0)}
-            }
-        }
+            snake.move(goal, 1, 0)
+            Thread.sleep(1000)        }
     }
 
     private fun render(snake: Snake, goal: Goal) {
 
+        val out = StringBuilder()
+
         val snakeArray = snake.getArray()
-        println()
-        println("-".repeat(width + 2))
+        out.append("-".repeat(2 * width + 3)).append("\n")
         for (i in 0 until height) {
-            var line = ""
             for (j in 0..width + 1) {
-                line += if (j == 0 || j == width + 1) {
-                    "|"
-                } else {
-                    val jNorm = j - 1
-                    if (goal.x == j && goal.y == i) {
-                        "X"
-                    } else if (snakeArray[i][jNorm] == 1) {
-                        "#"
-                    } else if (snakeArray[i][jNorm] == 2) {
-                        "O"
+                out.append(
+                    if (j == 0 || j == width + 1) {
+                        "| "
                     } else {
-                        "."
+                        val jNorm = j - 1
+                        if (goal.x == j && goal.y == i) {
+                            "X "
+                        } else if (snakeArray[i][jNorm] == 1) {
+                            "# "
+                        } else if (snakeArray[i][jNorm] == 2) {
+                            "O "
+                        } else {
+                            ". "
+                        }
                     }
-                }
+                )
             }
-            println(line)
+            out.append("\n")
         }
-        println("-".repeat(width + 2))
+        out.append("-".repeat(2 * width + 3))
+        view.output(out.toString())
     }
 
     data class Goal(var x: Int, var y: Int) {
