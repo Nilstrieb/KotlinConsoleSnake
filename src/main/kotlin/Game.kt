@@ -11,7 +11,7 @@ class Game(private val height: Int, private val width: Int, private val view: Sn
 
         while (true) {
             render(snake, goal)
-            Thread.sleep(1000)
+            Thread.sleep(500)
             when (keyBuffer) {
                 "w" -> snake.move(goal, 0, -1)
                 "a" -> snake.move(goal, -1, 0)
@@ -41,7 +41,7 @@ class Game(private val height: Int, private val width: Int, private val view: Sn
                         } else if (goal.x == j && goal.y == i) {
                             "X "
                         } else {
-                            ". "
+                            "  "
                         }
                     }
                 )

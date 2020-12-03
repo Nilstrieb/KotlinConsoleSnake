@@ -24,7 +24,7 @@ class Snake(private val width: Int, private val height: Int) {
         this.dirY = dirY
 
         var tail = Tile(x, y)
-        var oldPos = Tile(x, y)
+        var moveToPos = Tile(x, y)
 
         x += dirX
         y += dirY
@@ -36,13 +36,12 @@ class Snake(private val width: Int, private val height: Int) {
 
         if (tiles.size > 0) {
             tiles.forEach {
-                //TODO problem: copy position before moving but use old position to move
                 tail = it.copy()
+                val buffer = moveToPos.copy()
+                moveToPos = it.copy()
 
-                it.x = oldPos.x
-                it.y = oldPos.y
-
-                oldPos = it
+                it.x = buffer.x
+                it.y = buffer.y
 
                 if (it.x == this.x && it.y == this.y) {
                     println("self rip")
