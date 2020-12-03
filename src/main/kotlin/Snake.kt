@@ -1,6 +1,7 @@
 import Game.Goal
 
-class Snake(private val width: Int, private val height: Int) {
+class Snake(private val width: Int, private val height: Int, val game: Game) {
+
     private var x = width / 2
     private var y = height / 2
     private var dirX = 1
@@ -29,7 +30,7 @@ class Snake(private val width: Int, private val height: Int) {
         x += dirX
         y += dirY
 
-        if (!(x in 0 until width && x in 0 until height)) {
+        if (!(x in 0 until width && y in 0 until height)) {
             die()
         }
 
@@ -49,24 +50,22 @@ class Snake(private val width: Int, private val height: Int) {
         }
 
         if (goal.x == x && goal.y == y) {
-            println("goal")
             tiles.add(tail.copy())
             goal.rePos(width, height)
-        } else {
-            println("no goal $x $y  ${goal.x} ${goal.y}")
         }
 
     }
 
     private fun die() {
-        tiles = ArrayList()
-        tiles.add(Tile(x - 1, y))
-        tiles.add(Tile(x - 2, y))
-        tiles.add(Tile(x - 3, y))
+        game.rip(tiles.size - 3)
         x = width / 2
         y = height / 2
         dirX = 1
         dirY = 0
+        tiles = ArrayList()
+        tiles.add(Tile(x - 1, y))
+        tiles.add(Tile(x - 2, y))
+        tiles.add(Tile(x - 3, y))
     }
 
     fun getArray(): Array<IntArray> {
@@ -89,6 +88,8 @@ class Snake(private val width: Int, private val height: Int) {
         }
         return false;
     }
+
+    fun getPoints() = tiles.size - 3
 
     data class Tile(var x: Int, var y: Int)
 }

@@ -11,6 +11,7 @@ public class SnakeView {
     public SnakeView() {
         JFrame frame = new JFrame();
         frame.setSize(400, 400);
+        frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setContentPane(panel1);
         frame.setVisible(true);
