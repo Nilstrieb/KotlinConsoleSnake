@@ -6,19 +6,25 @@ class Snake(private val width: Int, private val height: Int) {
     private var dirX = 1
     private var dirY = 0
 
-    var tiles = ArrayList<Tile>()
+    private var tiles = ArrayList<Tile>()
 
-    fun move(goal: Goal){
+    init {
+        tiles.add(Tile(x - 1, y))
+        tiles.add(Tile(x - 2, y))
+        tiles.add(Tile(x - 3, y))
+    }
+
+    fun move(goal: Goal) {
         move(goal, dirX, dirY)
     }
 
     fun move(goal: Goal, dirX: Int, dirY: Int) {
 
         this.dirX = dirX
-        this.dirY= dirY
+        this.dirY = dirY
 
         var tail = Tile(x, y)
-        var front = Tile(x, y)
+        var oldPos = Tile(x, y)
 
         x += dirX
         y += dirY
@@ -30,20 +36,22 @@ class Snake(private val width: Int, private val height: Int) {
 
         if (tiles.size > 0) {
             tiles.forEach {
-                tail = it
-                it.x = front.x
-                it.y = front.y
+                //TODO problem: copy position before moving but use old position to move
+                tail = it.copy()
+
+                it.x = oldPos.x
+                it.y = oldPos.y
+
+                oldPos = it
 
                 if (it.x == this.x && it.y == this.y) {
                     println("self rip")
                     die()
                 }
-
-                front = it
             }
         }
 
-        if(goal.x == this.x && goal.y == this.y){
+        if (goal.x == this.x && goal.y == this.y) {
             tiles.add(tail.copy())
             goal.rePos(width, height)
         }
@@ -52,6 +60,9 @@ class Snake(private val width: Int, private val height: Int) {
 
     private fun die() {
         tiles = ArrayList()
+        tiles.add(Tile(x - 1, y))
+        tiles.add(Tile(x - 2, y))
+        tiles.add(Tile(x - 3, y))
         x = width / 2
         y = height / 2
         dirX = 1

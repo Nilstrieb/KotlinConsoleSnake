@@ -1,18 +1,18 @@
 import java.util.*
 import kotlin.random.Random
 
-class Game(val height: Int, val width: Int, val view: SnakeView) {
+class Game(private val height: Int, private val width: Int, private val view: SnakeView) {
 
-    var keyBuffer = ""
+    private var keyBuffer = ""
 
     fun start() {
         val snake = Snake(width, height)
-        val goal = Goal(9, 7)
+        val goal = Goal(9, 3)
 
         while (true) {
             render(snake, goal)
             Thread.sleep(1000)
-            when(keyBuffer){
+            when (keyBuffer) {
                 "w" -> snake.move(goal, 0, -1)
                 "a" -> snake.move(goal, -1, 0)
                 "s" -> snake.move(goal, 0, 1)
@@ -34,12 +34,12 @@ class Game(val height: Int, val width: Int, val view: SnakeView) {
                         "| "
                     } else {
                         val jNorm = j - 1
-                        if (goal.x == j && goal.y == i) {
-                            "X "
-                        } else if (snakeArray[i][jNorm] == 1) {
+                        if (snakeArray[i][jNorm] == 1) {
                             "# "
                         } else if (snakeArray[i][jNorm] == 2) {
                             "O "
+                        } else if (goal.x == j && goal.y == i) {
+                            "X "
                         } else {
                             ". "
                         }

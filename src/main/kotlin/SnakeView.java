@@ -18,7 +18,6 @@ public class SnakeView {
         canvas.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                System.out.println("pressed " + e.getKeyCode());
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_W -> game.keyTyped("w");
                     case KeyEvent.VK_A -> game.keyTyped("a");
