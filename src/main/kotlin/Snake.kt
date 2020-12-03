@@ -30,29 +30,30 @@ class Snake(private val width: Int, private val height: Int) {
         y += dirY
 
         if (!(x in 0 until width && x in 0 until height)) {
-            println("wall rip")
             die()
         }
 
         if (tiles.size > 0) {
             tiles.forEach {
                 tail = it.copy()
-                val buffer = moveToPos.copy()
+                val buffer = moveToPos
                 moveToPos = it.copy()
 
                 it.x = buffer.x
                 it.y = buffer.y
 
                 if (it.x == this.x && it.y == this.y) {
-                    println("self rip")
                     die()
                 }
             }
         }
 
-        if (goal.x == this.x && goal.y == this.y) {
+        if (goal.x == x && goal.y == y) {
+            println("goal")
             tiles.add(tail.copy())
             goal.rePos(width, height)
+        } else {
+            println("no goal $x $y  ${goal.x} ${goal.y}")
         }
 
     }
@@ -75,6 +76,18 @@ class Snake(private val width: Int, private val height: Int) {
         }
         array[y][x] = 2
         return array
+    }
+
+    fun isOccupied(x: Int, y: Int): Boolean {
+        if (this.x == x && this.y == y){
+            return true;
+        }
+        tiles.forEach{
+            if(it.x == x && it.y == y){
+                return true;
+            }
+        }
+        return false;
     }
 
     data class Tile(var x: Int, var y: Int)
